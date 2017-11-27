@@ -5,13 +5,13 @@ import signal
 import websockets
 import json
 
-hw_client_socket = None
+hw_client_list = []
 ok_response = {'server': 'ok'}
 
 
 @asyncio.coroutine
 def handler(websocket, path):
-    global hw_client_socket
+    global hw_client_list
     try:
         msg = yield from websocket.recv()
         reg_data = json.loads(str(msg))
@@ -19,9 +19,9 @@ def handler(websocket, path):
             # HW CLIENT
             if reg_data['client'] == 'hw_client':
                 print("Added HW client")
-                if hw_client_socket is None:
+                if len(hw_client_list) == 0:
                     yield from websocket.send(json.dumps(ok_response))
-                    hw_client_socket = websocket
+                    hw_client_list.append(websocket)
                     # wait for commands
                     while True:
                         msg = yield from websocket.recv()
@@ -35,12 +35,12 @@ def handler(websocket, path):
                 yield from websocket.send(json.dumps(ok_response))
                 while True:
                     msg = yield from websocket.recv()
-                    if hw_client_socket is None:
+                    if len(hw_client_list) == 0:
                         print("Sorry, no HW client")
                         return
                     else:
                         # send to hw_client
-                        yield from hw_client_socket.send(msg)
+                        yield from hw_client_list[0].send(msg)
             # BAD JSON
             else:
                 print("Wrong json message")
@@ -58,8 +58,8 @@ def handler(websocket, path):
 
 if __name__ == "__main__":
     # default server values
-    server_address = "localhost"
-    server_port = 9876
+    server_address = "0.0.0.0"
+    server_port = 5432
     # load paramaters from arguments
     try:
         opts, args = getopt.getopt(sys.argv[1:], "a:p:")
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         if opt == '-a':
             server_address = arg
         if opt == '-p':
-            server_port = arg
+            server_port = int(arg)
     # Get the event loop
     loop = asyncio.get_event_loop()
 

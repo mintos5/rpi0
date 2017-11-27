@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>rpi0 client</title>
+    <style>
+        article {
+            margin: auto;
+            width: 100%;
+        }
+        img {
+            display: block;
+            margin: auto;
+            width: 100%;
+        }
+        div.textForm {
+            padding-top: 1em;
+            text-align:center;
+            min-height: 40px;
+        }
+        div.textForm select {
+            width: 20%;
+            min-height: 40px;
+        }
+        div.textForm input {
+            width: 60%;
+            height: 100%;
+            min-height: 40px;
+        }
+        div.textForm button {
+            width: 10%;
+            min-height: 40px;
+        }
+        div.buttons {
+            text-align:center;
+            min-height: 50px;
+        }
+        div.buttons button {
+            width: 47%;
+            min-height: 50px;
+        }
+    </style>
+</head>
+<body onload="main()">
+        <script src="js_client/sw2net.js"></script>
+        <header>
+            <h1 align="center">rpi() client</h1>
+        </header>
+        <article >
+        <img id="source" src="js_client/touchpad.png">
+        <div class="buttons">
+            <button type="button" onclick="buttonClick(1)">L</button>
+            <button type="button" onclick="buttonClick(2)">R</button>
+        </div>
+        <div class="textForm">
+            <select id="inputTypeSelect" name="inputType" onchange="disableInput()">
+                <option value="string">String</option>
+                <option value="return">Enter</option>
+                <option value="space">Space</option>
+                <option value="backspace">Backspace</option>
+                <option value="esc">Esc</option>
+                <option value="left">Left</option>
+                <option value="right">Right</option>
+                <option value="down">Down</option>
+                <option value="up">Up</option>
+            </select>
+            <input id="inputBox" type="text" >
+            <button type="button" onclick="textClick()">Send</button>
+        </div>
+        </article>
+</body>
+</html>

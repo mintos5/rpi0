@@ -55,6 +55,11 @@ class Application:
         "9": 0x26,
         "0": 0x27,
         " ": 0x2c,
+        "-": 0x2d,
+        "=": 0x2e,
+        ".": 0x37,
+        ",": 0x36,
+        ";": 0x33,
         "\n": 0x28
     }
 
@@ -130,7 +135,10 @@ class Application:
             for c in arg:
                 if c.isupper():
                     report[0] = self.hid_shift
-                report[2] = self.hid_basic[c.lower()]
+                if c.lower() in self.hid_basic:
+                    report[2] = self.hid_basic[c.lower()]
+                else:
+                    report[2] = self.hid_basic['-']
                 print(report)
                 self.keyboard_file.write(bytes(report))
                 self.keyboard_file.write(b'\x00\x00\x00\x00\x00\x00\x00\x00')
