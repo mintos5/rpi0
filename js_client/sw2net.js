@@ -43,6 +43,7 @@ function textClick() {
 		}
 		// console.log(out)
 		rpi0Ssocket.send(JSON.stringify(out));
+		document.getElementById("inputBox").value = "";
 	}
 	else {
 		var out = {
