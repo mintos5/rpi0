@@ -1,15 +1,39 @@
-var rpi0Ssocket = new WebSocket("ws://147.175.149.172:5432");
 var rpi0Ready = false;
+var defaultAddress = "ws://147.175.149.172:5432";
+var rpi0Ssocket = new WebSocket(defaultAddress);
+socketAttachHandlers();
 
-rpi0Ssocket.onopen = function (event) {
-	var hello = {
-		client: "sw_client"
-	};
-	rpi0Ssocket.send(JSON.stringify(hello)); 
-};
-rpi0Ssocket.onmessage = function (event) {
-  console.log(event.data);
-  rpi0Ready = true;
+function socketAttachHandlers() {
+
+	rpi0Ssocket.onerror =  function (event) {
+		//the connection was never ready
+		if (rpi0Ready === false){
+			console.log(event);
+			var address = prompt("Please enter address of server:", defaultAddress);
+			if (address == null || address == "") {
+				console.log("No address :/");
+			}
+			else {
+				rpi0Ssocket = new WebSocket(address);
+				socketAttachHandlers();
+			}
+		}
+		else {
+			rpi0Ready = false;
+		}
+	}
+
+	rpi0Ssocket.onopen = function (event) {
+		var hello = {
+			client: "sw_client"
+		};
+		rpi0Ssocket.send(JSON.stringify(hello)); 
+	}
+
+	rpi0Ssocket.onmessage = function (event) {
+	 	console.log(event.data);
+	 	rpi0Ready = true;
+	}
 }
 
 function buttonClick(button) {
@@ -41,8 +65,10 @@ function textClick() {
 			type: "keyboard_string",
 			string: text
 		}
-		// console.log(out)
-		rpi0Ssocket.send(JSON.stringify(out));
+		if (rpi0Ready) {
+			// console.log(out)
+			rpi0Ssocket.send(JSON.stringify(out));
+		}
 		document.getElementById("inputBox").value = "";
 	}
 	else {
@@ -50,8 +76,10 @@ function textClick() {
 			type: "keyboard_symbol",
 			button: whatSend
 		}
-		// console.log(out)
-		rpi0Ssocket.send(JSON.stringify(out));
+		if (rpi0Ready) {
+			// console.log(out)
+			rpi0Ssocket.send(JSON.stringify(out));
+		}
 	}
 }
 
@@ -87,7 +115,9 @@ src.addEventListener('touchmove', function(e) {
 			x: Math.floor(deltaX),
 			y: Math.floor(deltaY)
 		}
-		// console.log(out)
-		rpi0Ssocket.send(JSON.stringify(out));
+		if (rpi0Ready) {
+			// console.log(out)
+			rpi0Ssocket.send(JSON.stringify(out));
+		}
 	}, false);
 }
