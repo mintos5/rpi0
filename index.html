@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <title>rpi0 client</title>
     <style>
+        html, body {
+            overflow: hidden;
+        }
+
+        body {
+            position: fixed;
+            height: 100%;
+            overflow: hidden;
+            width: 100%;
+        }
+
         article {
             margin: auto;
             width: 100%;
@@ -33,11 +44,11 @@
         }
         div.buttons {
             text-align:center;
-            min-height: 50px;
+            min-height: 120px;
         }
         div.buttons button {
             width: 47%;
-            min-height: 50px;
+            min-height: 120px;
         }
     </style>
 </head>
@@ -47,7 +58,7 @@
             <h1 align="center">rpi() client</h1>
         </header>
         <article >
-        <img id="source" src="js_client/touchpad.png">
+        <img id="source" src="js_client/touchpad.png" onclick="buttonClick(1)">
         <div class="buttons">
             <button type="button" onclick="buttonClick(1)">L</button>
             <button type="button" onclick="buttonClick(2)">R</button>

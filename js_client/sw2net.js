@@ -25,10 +25,10 @@ function buttonClick(button) {
 		out["button"] = "b2"
 	}
 	if (rpi0Ready) {
-		console.log(out)
+		// console.log(out)
 		rpi0Ssocket.send(JSON.stringify(out));
 		out["button"] = "b0"
-		console.log(out)
+		// console.log(out)
 		rpi0Ssocket.send(JSON.stringify(out));
 	}
 }
@@ -41,7 +41,7 @@ function textClick() {
 			type: "keyboard_string",
 			string: text
 		}
-		console.log(out)
+		// console.log(out)
 		rpi0Ssocket.send(JSON.stringify(out));
 	}
 	else {
@@ -49,7 +49,7 @@ function textClick() {
 			type: "keyboard_symbol",
 			button: whatSend
 		}
-		console.log(out)
+		// console.log(out)
 		rpi0Ssocket.send(JSON.stringify(out));
 	}
 }
@@ -73,10 +73,12 @@ function main(){
 		clientY = e.touches[0].clientY;
 	}, false);
 
-src.addEventListener('touchend', function(e) {
+src.addEventListener('touchmove', function(e) {
 		var deltaX, deltaY;
 	 	deltaX = e.changedTouches[0].clientX - clientX;
 	  	deltaY = e.changedTouches[0].clientY - clientY;
+	  	clientX = e.changedTouches[0].clientX;
+		clientY = e.changedTouches[0].clientY;
 	  	// Process the data and send them to server
 	  	var out = {
 			type: "mouse",
@@ -84,7 +86,7 @@ src.addEventListener('touchend', function(e) {
 			x: Math.floor(deltaX),
 			y: Math.floor(deltaY)
 		}
-		console.log(out)
+		// console.log(out)
 		rpi0Ssocket.send(JSON.stringify(out));
 	}, false);
 }
