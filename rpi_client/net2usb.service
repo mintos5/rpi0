@@ -1,0 +1,12 @@
+[Unit]
+Description=PacketConverter daemon
+
+[Service]
+WorkingDirectory=/boot
+ExecStart=/boot/net2usb.sh
+SyslogIdentifier=packet_converter
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
